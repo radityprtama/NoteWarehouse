@@ -368,7 +368,7 @@ export type Database = {
         ];
       };
     };
-    Views: Record<string, never>;
+    Views: { [_ in never]: never };
     Functions: {
       search_notes: {
         Args: {
@@ -393,8 +393,8 @@ export type Database = {
         }[];
       };
     };
-    Enums: Record<string, never>;
-    CompositeTypes: Record<string, never>;
+    Enums: { [_ in never]: never };
+    CompositeTypes: { [_ in never]: never };
   };
 };
 

@@ -12,7 +12,7 @@ export async function createSupabaseServerClient() {
     });
   };
 
-  return createServerClient<Database>(
+  return createServerClient<Database, "public", Database["public"]>(
     publicEnv.NEXT_PUBLIC_SUPABASE_URL,
     publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {

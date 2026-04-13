@@ -6,6 +6,7 @@ import { Menu, Search } from "lucide-react";
 import type { CurrentProfileResult } from "@/lib/queries/profile";
 import { Sidebar } from "@/components/app/sidebar";
 import { ThemeToggle } from "@/components/app/theme-toggle";
+import { GlobalSearch } from "@/components/search/global-search";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -49,17 +50,7 @@ export function Topbar({ currentProfile }: TopbarProps) {
           </Link>
         </Button>
 
-        <Button asChild variant="outline" className="hidden min-h-11 flex-1 justify-between rounded-full px-4 text-left sm:flex sm:max-w-2xl">
-          <Link href="/search" aria-label="Search your vault">
-            <span className="flex items-center gap-2 text-muted-foreground">
-              <Search className="size-4" />
-              Search your vault
-            </span>
-            <span className="rounded-full border border-border/70 bg-muted px-2.5 py-1 text-[0.7rem] font-medium tracking-[0.2em] text-muted-foreground">
-              Ctrl K
-            </span>
-          </Link>
-        </Button>
+        <GlobalSearch className="hidden max-w-2xl flex-1 sm:block" />
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <Button asChild variant="ghost" className="hidden rounded-full px-4 text-sm sm:inline-flex">

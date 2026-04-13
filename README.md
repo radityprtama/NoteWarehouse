@@ -21,7 +21,7 @@ The current MVP includes:
 - Next.js 16 with App Router and root `proxy.ts`.
 - React 19 and TypeScript strict mode.
 - Tailwind CSS 4 and shadcn/ui primitives.
-- Supabase Auth, Postgres, RLS, SSR clients, and SQL migrations.
+- Supabase Auth, Postgres, RLS, SSR clients, SQL migrations, and Drizzle ORM schema tooling.
 - React Hook Form and Zod for forms and validation.
 - react-markdown, remark-gfm, and rehype-highlight for Markdown rendering.
 - cmdk command palette, Lucide icons, next-themes, TanStack Query provider, sonner toasts, date-fns, and Vitest.
@@ -39,6 +39,8 @@ Key layers:
 - `components` contains app shell, editor, note, search, form, and shadcn UI components.
 - `lib/actions` contains server actions for auth, notes, profile, search history, organization, and preferences.
 - `lib/queries` contains server-side read models for dashboard, notes, search, profile, and organization.
+- `db/schema.ts` contains the Drizzle ORM schema mirror for public application tables.
+- `lib/db/client.ts` exposes a server-only Drizzle client for trusted server-side database work.
 - `lib/validators` contains Zod schemas shared by client/server form logic.
 - `lib/markdown`, `lib/search`, and `lib/import-export` contain pure utilities with unit tests.
 - `supabase/migrations` and `supabase/seed.sql` define the database.
@@ -59,7 +61,7 @@ Main tables:
 - `note_tags`: many-to-many note/tag relation.
 - `note_collections`: many-to-many note/collection relation.
 - `search_history`: recent search history for authenticated users.
-- `attachments`: schema-ready table for future Supabase Storage-backed media.
+Attachments are planned as a future schema addition alongside Supabase Storage policies.
 
 Search:
 
@@ -134,6 +136,7 @@ NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-local-or-project-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-local-or-project-service-role-key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
 ```
 
 For local Supabase:
@@ -170,6 +173,42 @@ Recommended redirect URLs:
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY` in client code. It is only for trusted server-side code.
 
+## Drizzle ORM
+
+Drizzle is configured in [drizzle.config.ts](./drizzle.config.ts) and uses [db/schema.ts](./db/schema.ts). The runtime app still uses Supabase SSR clients for most authenticated user data so Supabase Auth and RLS keep working as the security boundary. Drizzle is used for schema definitions, generated migrations, Studio, trusted server-only database tasks, and the authenticated JSON backup export.
+
+Environment variable:
+
+```bash
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+```
+
+Local Supabase uses port `54322` for Postgres by default. For a hosted Supabase project, copy a connection string from Supabase Dashboard, Project Settings, Database. Supabase provides direct and pooler URLs. For migrations, prefer a direct connection when available, or a session pooler URL. Keep this value server-only.
+
+Drizzle scripts:
+
+```bash
+npm run db:generate
+npm run db:migrate
+npm run db:push
+npm run db:introspect
+npm run db:check
+npm run db:studio
+```
+
+Recommended workflow for this project:
+
+1. Apply the existing baseline SQL migration first with Supabase CLI: `supabase db reset` locally, or `supabase db push` for a linked project.
+2. Edit `db/schema.ts` for future schema changes.
+3. Generate a Drizzle migration with `npm run db:generate -- --name <change_name>`.
+4. Review the generated SQL in `drizzle/`.
+5. Apply it to the Supabase database with `npm run db:migrate`.
+6. If the migration affects app-facing types, regenerate Supabase types or update `types/database.ts`.
+
+Important adoption note: the project already has a hand-written baseline migration in `supabase/migrations`. Do not apply a Drizzle-generated initial create-table migration to a database that already has that baseline. Use Drizzle-generated migrations for changes after the baseline, or introspect an existing database with `npm run db:introspect` if you want to rebuild the Drizzle schema from a live Supabase database.
+
+Drizzle-generated migrations cover schema objects represented in `db/schema.ts`. Keep Supabase-specific RLS policies, Auth triggers, RPC functions, and extension setup in explicit SQL migrations unless they are intentionally moved into Drizzle-managed SQL.
+
 ## Scripts
 
 ```bash
@@ -179,6 +218,10 @@ npm run typecheck
 npm run test
 npm run build
 npm run start
+npm run db:generate
+npm run db:migrate
+npm run db:check
+npm run db:studio
 ```
 
 Verification used during this build:
@@ -195,7 +238,7 @@ Verification used during this build:
 Deploy on Vercel:
 
 1. Import the repository into Vercel.
-2. Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `NEXT_PUBLIC_APP_URL`.
+2. Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL`, and server-only `DATABASE_URL`.
 3. Apply Supabase migrations before the first production deployment.
 4. Add Vercel preview and production callback URLs in Supabase Auth.
 5. Deploy.
@@ -244,7 +287,7 @@ The schema is designed for future expansion:
 - Version history can use a `note_versions` table populated by update triggers or explicit save checkpoints.
 - Public sharing can add signed public slugs and visibility policies around `notes.visibility`.
 - Collaboration can add workspace tables, memberships, and role-aware RLS policies.
-- Attachments can use Supabase Storage with an `attachments` table already modeled in the migration.
+- Attachments can use Supabase Storage with an `attachments` table, storage bucket policies, and note/media relation records.
 - Backlinks can be added by parsing Markdown links and storing edges in a `note_links` table.
 - Smart collections can be represented as saved filter definitions on collections or a dedicated `smart_collections` table.
 

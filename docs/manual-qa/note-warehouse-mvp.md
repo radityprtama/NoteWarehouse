@@ -8,7 +8,9 @@ Use this checklist before deploying a new build. Test with at least one fresh Su
 - `.env.local` contains `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - `.env.local` contains `SUPABASE_SERVICE_ROLE_KEY`.
 - `.env.local` contains `NEXT_PUBLIC_APP_URL`.
+- `.env.local` contains `DATABASE_URL` for Drizzle Kit commands.
 - Supabase migrations have been applied.
+- Drizzle Kit can connect with `npm run db:studio` or `npm run db:introspect`.
 - Supabase Auth redirect URLs include local and deployed callback URLs.
 
 ## Auth

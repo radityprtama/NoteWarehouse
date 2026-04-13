@@ -8,6 +8,7 @@ import {
   toggleFavoriteAction,
   togglePinnedAction,
 } from "@/lib/actions/notes";
+import { ConfirmSubmitButton } from "@/components/notes/confirm-submit-button";
 import { Button } from "@/components/ui/button";
 
 export function NoteActions({
@@ -73,10 +74,10 @@ export function NoteActions({
         </Button>
       </form>
       <form action={deleteAction}>
-        <Button type="submit" variant="outline" className="rounded-full">
+        <ConfirmSubmitButton message="Delete this note permanently? This cannot be undone.">
           <Trash2 className="size-4" />
           Delete
-        </Button>
+        </ConfirmSubmitButton>
       </form>
       <Button asChild className="rounded-full">
         <Link href={`/notes/${note.slug}/edit`}>

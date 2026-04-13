@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Settings2, UserRound } from "lucide-react";
+import { Download, Settings2, UserRound } from "lucide-react";
 import Link from "next/link";
 
 import { PreferencesForm } from "@/components/forms/preferences-form";
@@ -104,6 +104,24 @@ export default async function SettingsPage() {
             <CardContent>
               <Button asChild variant="outline" className="rounded-full">
                 <Link href="/profile">Open profile</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/60 bg-card/90 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Download className="size-5 text-accent" />
+                Backup export
+              </CardTitle>
+              <CardDescription>
+                Download notes, folders, tags, collections, and preferences as a JSON
+                archive.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild variant="outline" className="rounded-full">
+                <a href="/api/backup">Download backup</a>
               </Button>
             </CardContent>
           </Card>

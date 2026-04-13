@@ -1,5 +1,6 @@
 import { BookOpenText, Plus } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { NoteCard } from "@/components/notes/note-card";
 import { Button } from "@/components/ui/button";
@@ -10,10 +11,12 @@ export function NoteList({
   title,
   description,
   notes,
+  actions,
 }: {
   title: string;
   description: string;
   notes: NoteListItem[];
+  actions?: ReactNode;
 }) {
   return (
     <main className="space-y-8 px-6 py-8 lg:px-8">
@@ -25,12 +28,15 @@ export function NoteList({
           <h1 className="font-display text-5xl tracking-tight">{title}</h1>
           <p className="max-w-2xl text-muted-foreground">{description}</p>
         </div>
-        <Button asChild className="rounded-full">
-          <Link href="/notes/new">
-            <Plus className="size-4" />
-            New note
-          </Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          {actions}
+          <Button asChild className="rounded-full">
+            <Link href="/notes/new">
+              <Plus className="size-4" />
+              New note
+            </Link>
+          </Button>
+        </div>
       </header>
 
       {notes.length > 0 ? (

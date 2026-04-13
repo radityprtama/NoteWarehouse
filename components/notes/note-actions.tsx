@@ -1,4 +1,4 @@
-import { Archive, RotateCcw, Star, Trash2, Pencil, Pin } from "lucide-react";
+import { Archive, Download, RotateCcw, Star, Trash2, Pencil, Pin } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -83,6 +83,12 @@ export function NoteActions({
           <Pencil className="size-4" />
           Edit
         </Link>
+      </Button>
+      <Button asChild variant="outline" className="rounded-full">
+        <a href={`/api/notes/${note.slug}/export`}>
+          <Download className="size-4" />
+          Export .md
+        </a>
       </Button>
     </div>
   );

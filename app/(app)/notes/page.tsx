@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { ImportNotesDialog } from "@/components/notes/import-notes-dialog";
 import { NoteList } from "@/components/notes/note-list";
 import { getNotesList } from "@/lib/queries/notes";
 
@@ -16,6 +17,7 @@ export default async function NotesPage() {
       title="All notes"
       description="Browse the latest active notes in your Markdown vault."
       notes={notes}
+      actions={<ImportNotesDialog />}
     />
   );
 }

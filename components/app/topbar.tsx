@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, Search } from "lucide-react";
 
 import type { CurrentProfileResult } from "@/lib/queries/profile";
+import { CommandMenu } from "@/components/app/command-menu";
 import { Sidebar } from "@/components/app/sidebar";
 import { ThemeToggle } from "@/components/app/theme-toggle";
 import { GlobalSearch } from "@/components/search/global-search";
@@ -23,6 +24,8 @@ type TopbarProps = {
 
 export function Topbar({ currentProfile }: TopbarProps) {
   const displayName = currentProfile.profile?.display_name ?? currentProfile.email;
+  const commandPaletteEnabled =
+    currentProfile.preferences?.command_palette_enabled ?? true;
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur-xl">
@@ -53,6 +56,7 @@ export function Topbar({ currentProfile }: TopbarProps) {
         <GlobalSearch className="hidden max-w-2xl flex-1 sm:block" />
 
         <div className="flex flex-1 items-center justify-end gap-2">
+          <CommandMenu enabled={commandPaletteEnabled} />
           <Button asChild variant="ghost" className="hidden rounded-full px-4 text-sm sm:inline-flex">
             <Link href="/profile">{displayName}</Link>
           </Button>

@@ -43,7 +43,7 @@ export function GlobalSearch({
         onChange={(event) => setValue(event.target.value)}
       />
       <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-border/70 bg-muted px-2 py-0.5 text-[0.65rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-        {pending ? "..." : "Ctrl K"}
+        {pending ? "..." : "Enter"}
       </span>
     </form>
   );

@@ -114,7 +114,7 @@ Requirements:
 
 - Node.js 20 or newer.
 - npm.
-- Supabase CLI for local database work.
+- Docker for the local Supabase stack.
 - A Supabase project, or local Supabase via the CLI.
 
 Install dependencies:
@@ -142,9 +142,11 @@ DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
 For local Supabase:
 
 ```bash
-supabase start
-supabase db reset
+npm run supabase:start
+npm run supabase:reset
 ```
+
+The Supabase CLI is installed as a local dev dependency, so `npx supabase start` and `npx supabase db reset` also work if you prefer direct CLI commands.
 
 Run the app:
 
@@ -194,6 +196,9 @@ npm run db:push
 npm run db:introspect
 npm run db:check
 npm run db:studio
+npm run supabase:start
+npm run supabase:reset
+npm run supabase:status
 ```
 
 Recommended workflow for this project:

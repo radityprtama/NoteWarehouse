@@ -12,6 +12,7 @@ Use this checklist before deploying a new build. Test with at least one fresh Su
 - Supabase migrations have been applied.
 - Drizzle Kit can connect with `npm run db:studio` or `npm run db:introspect`.
 - Supabase Auth redirect URLs include local and deployed callback URLs.
+- Local Supabase CLI works with `npm run supabase:status`.
 
 ## Auth
 

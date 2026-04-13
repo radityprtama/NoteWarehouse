@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && mkdir -p .next/dev/types && cp .next/types/routes.d.ts .next/dev/types/routes.d.ts && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
@@ -15,7 +15,11 @@
     "db:push": "drizzle-kit push",
     "db:introspect": "drizzle-kit introspect",
     "db:check": "drizzle-kit check",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "supabase:reset": "supabase db reset"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -65,6 +69,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "jsdom": "^25.0.1",
+    "supabase": "^2.89.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4",

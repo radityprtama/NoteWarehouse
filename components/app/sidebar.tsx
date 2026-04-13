@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Archive, BookOpenText, FolderKanban, LayoutGrid, LogOut, Search, Settings2, Star, Tags, UserRound } from "lucide-react";
+import { Archive, BookOpenText, Folder, FolderKanban, LayoutGrid, LogOut, Search, Settings2, Star, Tags, UserRound } from "lucide-react";
 
 import { signOutAction } from "@/lib/actions/auth";
 import type { CurrentProfileResult } from "@/lib/queries/profile";
@@ -20,6 +20,7 @@ type SidebarProps = {
 const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
   { href: "/notes", label: "Notes", icon: BookOpenText },
+  { href: "/folders", label: "Folders", icon: Folder },
   { href: "/collections", label: "Collections", icon: FolderKanban },
   { href: "/tags", label: "Tags", icon: Tags },
   { href: "/favorites", label: "Favorites", icon: Star },

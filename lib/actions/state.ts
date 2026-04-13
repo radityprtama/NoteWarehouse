@@ -47,3 +47,37 @@ export type NoteActionState = {
 export const initialNoteActionState: NoteActionState = {
   status: "idle",
 };
+
+export type OrganizationActionField =
+  | "name"
+  | "slug"
+  | "description"
+  | "color"
+  | "is_pinned";
+
+export type OrganizationActionState = {
+  status: "idle" | "error" | "success";
+  message?: string;
+  fieldErrors?: Partial<Record<OrganizationActionField, string[]>>;
+};
+
+export const initialOrganizationActionState: OrganizationActionState = {
+  status: "idle",
+};
+
+export type PreferenceActionField =
+  | "theme"
+  | "editor_mode"
+  | "editor_width"
+  | "sidebar_collapsed"
+  | "command_palette_enabled";
+
+export type PreferenceActionState = {
+  status: "idle" | "error" | "success";
+  message?: string;
+  fieldErrors?: Partial<Record<PreferenceActionField, string[]>>;
+};
+
+export const initialPreferenceActionState: PreferenceActionState = {
+  status: "idle",
+};
